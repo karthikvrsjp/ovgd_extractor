@@ -1,0 +1,11 @@
+
+export http_proxy=<proxy_server:port>
+export https_proxy=<proxy_server:port>
+export no_proxy=<comma separated ip list>
+export ovgd_host=OVGD_IP
+export ovgd_username=OVGD_USERNAME
+export ovgd_password=OVGD_PASSWORD
+export ovgd_authLoginDomain=local
+export ovgd_extr_numAlertsProcessedAtStart=2000
+export ovgd_extr_logging_level=INFO
+
