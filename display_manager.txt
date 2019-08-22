@@ -1,0 +1,16 @@
+
+Reference:
+	https://www.makeuseof.com/tag/choose-switch-linux-display-managers/
+
+What is Display manager: 
+	Display manager is sometimes referred to as a “login manager”, a display manager is responsible for starting the display server and loading the Linux desktop after you type in your username and password. Simply put, it controls user sessions and manages user authentication.
+	
+Why Replace a Display Manager?
+	Why would anyone want to replace a display manager, you ask? Well, here are a few probable scenarios:
+
+	1. You are trying to revive an old PC and you need a lightweight display manager.
+	2. Your current display manager breaks after an update, and it’s much faster to just install a different one than migrate to another distro
+	3. You want to apply gorgeous themes to your login window, but your distro’s default display manager is limited in this respect.
+	
+	There are several popular display managers for Linux. You’ll notice they’re quite similar in appearance; the main differences lie in their size, complexity, and the way they manage users and sessions.
+	
