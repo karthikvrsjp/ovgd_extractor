@@ -64,7 +64,6 @@ def get_ovgd_token(ovgdConfig):
 	body = { 'authLoginDomain': ovgdConfig["authLoginDomain"], 'userName': ovgdConfig["username"], 'password': ovgdConfig["password"] }
 	
 	#print(json.dumps(body, indent=4))
-	#print(req_url)
 	resp = requests.post(req_url, headers=headers, data=json.dumps(body), verify=False)
     
 	if (resp.status_code != 200):
@@ -660,7 +659,6 @@ def validate_input_module():
 		
 	else:
 		#from inputModuleName import init, execute, cleanup
-		print(inputModuleName)
 		inputModule = __import__(inputModuleName)
 		module_init = inputModule.init
 		module_execute = inputModule.execute
