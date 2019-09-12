@@ -37,6 +37,7 @@ from datetime import datetime
 
 import base64
 import ast
+import sys
 
 
 global gLastAlertTimestampFile, gMissedAlertsInfoFile, gServersURItoHostnamesMap, gOvgdDir
@@ -63,8 +64,9 @@ def get_ovgd_token(ovgdConfig):
 	body = { 'authLoginDomain': ovgdConfig["authLoginDomain"], 'userName': ovgdConfig["username"], 'password': ovgdConfig["password"] }
 	
 	#print(json.dumps(body, indent=4))
-	
+	#print(req_url)
 	resp = requests.post(req_url, headers=headers, data=json.dumps(body), verify=False)
+    
 	if (resp.status_code != 200):
 		logging.error("Failed to retrive TOKEN..! Status code = {}. Error Message = {}.".format(resp.status_code, resp.text))
 		exit(1)
@@ -137,8 +139,8 @@ def alert_name_change(Host, auth_token, alert, serverMap):
 	if alert["physicalResourceType"] == "server-hardware":
 		serverID = alert["resourceUri"].split("/")[-1]
 		
-		if serverID in serverMap.keys(): 
-			if len(serverMap[serverID]) > 0:
+		if serverID in serverMap.keys():
+			if (serverMap[serverID] != None and len(serverMap[serverID]) > 0):
 				print("ServerID - {} : Hostname - {}".format(serverID, serverMap[serverID]))
 				alert["associatedResource"]["resourceName"] = serverMap[serverID]
 			else:
@@ -150,7 +152,7 @@ def alert_name_change(Host, auth_token, alert, serverMap):
 			# Recreate the server map with refreshFalg set. 
 			serverMap = get_server_hardware_hostname_map(Host, auth_token, 1)
 			if serverID in serverMap.keys(): 
-				if len(serverMap[serverID]) > 0:
+				if (serverMap[serverID] != None and len(serverMap[serverID]) > 0):
 					print(" (2nd time) ServerID - {} : Hostname - {}".format(serverID, serverMap[serverID]))
 					alert["associatedResource"]["resourceName"] = serverMap[serverID]
 				else:
@@ -580,7 +582,11 @@ def get_ovgd_config_from_env():
 	# If a particular variable is not present, it will return a NULL string and that will be assigned to that config variable
 	ovgd_config["ovgd_host"] = os.environ.get('ovgd_host')
 	ovgd_config["username"] = os.environ.get('ovgd_username')
-	ovgd_config["password"] = os.environ.get('ovgd_password')
+	#ovgd_config["password"] = os.environ.get('ovgd_password')
+	tempPwd = os.environ.get('ovgd_password')
+	tempPwd = base64.b64decode(tempPwd)
+	tempPwd = tempPwd.decode('utf-8')
+	ovgd_config["password"] = tempPwd
 	ovgd_config["authLoginDomain"] = os.environ.get('ovgd_authLoginDomain')
 	ovgd_config["numAlertsProcessedAtStart"] = os.environ.get('ovgd_extr_numAlertsProcessedAtStart')
 	
@@ -654,6 +660,7 @@ def validate_input_module():
 		
 	else:
 		#from inputModuleName import init, execute, cleanup
+		print(inputModuleName)
 		inputModule = __import__(inputModuleName)
 		module_init = inputModule.init
 		module_execute = inputModule.execute
